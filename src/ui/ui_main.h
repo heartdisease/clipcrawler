@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'main.ui'
 **
-** Created: Sat Nov 12 14:18:47 2011
+** Created: Mon Nov 21 13:23:10 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -27,7 +27,6 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWidget
 {
 public:
-    QWidget *widget;
     QGridLayout *gridLayout;
     QLabel *label;
     QLineEdit *urlField;
@@ -41,47 +40,45 @@ public:
     {
         if (MainWidget->objectName().isEmpty())
             MainWidget->setObjectName(QString::fromUtf8("MainWidget"));
-        MainWidget->resize(414, 311);
-        widget = new QWidget(MainWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(0, 0, 411, 311));
-        gridLayout = new QGridLayout(widget);
+        MainWidget->resize(512, 333);
+        gridLayout = new QGridLayout(MainWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(widget);
+        label = new QLabel(MainWidget);
         label->setObjectName(QString::fromUtf8("label"));
 
-        gridLayout->addWidget(label, 0, 0, 1, 2);
+        gridLayout->addWidget(label, 0, 0, 1, 1);
 
-        urlField = new QLineEdit(widget);
+        urlField = new QLineEdit(MainWidget);
         urlField->setObjectName(QString::fromUtf8("urlField"));
 
-        gridLayout->addWidget(urlField, 0, 2, 1, 2);
+        gridLayout->addWidget(urlField, 0, 1, 1, 2);
 
-        label_2 = new QLabel(widget);
+        label_2 = new QLabel(MainWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
 
-        gridLayout->addWidget(label_2, 1, 0, 1, 2);
+        gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
-        downloadField = new QLineEdit(widget);
+        downloadField = new QLineEdit(MainWidget);
         downloadField->setObjectName(QString::fromUtf8("downloadField"));
 
-        gridLayout->addWidget(downloadField, 1, 2, 1, 1);
+        gridLayout->addWidget(downloadField, 1, 1, 1, 1);
 
-        browseButton = new QPushButton(widget);
+        browseButton = new QPushButton(MainWidget);
         browseButton->setObjectName(QString::fromUtf8("browseButton"));
 
-        gridLayout->addWidget(browseButton, 1, 3, 1, 1);
+        gridLayout->addWidget(browseButton, 1, 2, 1, 1);
 
-        downloadButton = new QPushButton(widget);
+        downloadButton = new QPushButton(MainWidget);
         downloadButton->setObjectName(QString::fromUtf8("downloadButton"));
+        downloadButton->setMinimumSize(QSize(0, 44));
 
-        gridLayout->addWidget(downloadButton, 2, 0, 1, 4);
+        gridLayout->addWidget(downloadButton, 2, 0, 1, 3);
 
-        textEdit = new QTextEdit(widget);
+        textEdit = new QTextEdit(MainWidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        textEdit->setReadOnly(true);
 
-        gridLayout->addWidget(textEdit, 3, 0, 1, 4);
+        gridLayout->addWidget(textEdit, 3, 0, 1, 3);
 
 #ifndef QT_NO_SHORTCUT
         label->setBuddy(urlField);
