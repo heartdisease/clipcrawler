@@ -1,3 +1,5 @@
+QT += network
+
 TARGET = clipcrawler
 CONFIG += debug_and_release
 

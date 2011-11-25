@@ -1,15 +1,11 @@
 #include "MainWindow.h"
 
-MainWidget::MainWidget(QWidget* parent) : QWidget(parent)
-{
-	setupUi(this);
-}
+#include "MainWidget.h"
 
 MainWindow::MainWindow(int width, int height)
 {
-	centralWidget = new MainWidget(this);
-	setCentralWidget(centralWidget);
+	setCentralWidget(new MainWidget(this));
 	setBaseSize(width, height);
 	setMinimumSize(width, height);
-	setWindowTitle("clipcrawler 0.1dev1");
+	setWindowTitle("clipcrawler 0.1dev2");
 }

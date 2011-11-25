@@ -48,7 +48,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/YoutubeInterface.cpp" />
+		<Unit filename="src/YoutubeInterface.h" />
 		<Unit filename="src/clipcrawler.cpp" />
+		<Unit filename="src/ui/MainWidget.cpp" />
+		<Unit filename="src/ui/MainWidget.h" />
 		<Unit filename="src/ui/MainWindow.cpp" />
 		<Unit filename="src/ui/MainWindow.h" />
 		<Unit filename="src/ui/ui_main.h" />

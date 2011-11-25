@@ -1,22 +1,10 @@
-#ifndef __MAIN_WINDOW_H__
-#define __MAIN_WINDOW_H__
-
-#include "ui_main.h"
+#ifndef CLIPCRAWLER_MAIN_WINDOW_H__
+#define CLIPCRAWLER_MAIN_WINDOW_H__
 
 #include <QMainWindow>
-#include <QWidget>
-
-class MainWidget : public QWidget, private Ui::MainWidget
-{
-	public:
-		MainWidget(QWidget *parent);
-};
 
 class MainWindow : public QMainWindow
 {
-	private:
-		MainWidget *centralWidget;
-
 	public:
 		MainWindow(int width, int height);
 };
