@@ -14,6 +14,7 @@ class YoutubeInterface : public QObject, public QNetworkRequest
 		QString id;
 		QString videoUrl;
 		QString videoTitle;
+		QString videoFormat;
 		QNetworkAccessManager *manager;
 
 	signals:
@@ -22,8 +23,9 @@ class YoutubeInterface : public QObject, public QNetworkRequest
 	public:
 		YoutubeInterface(QNetworkAccessManager *manager);
 		void fetchUrl(QString url);
-		const QString &getVideoUrl();
-		const QString &getVideoTitle();
+		const QString &getVideoUrl() const;
+		const QString &getVideoTitle() const;
+		const QString &getVideoFormat() const;
 };
 
 #endif

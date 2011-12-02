@@ -48,6 +48,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/DownloadManager.cpp" />
+		<Unit filename="src/DownloadManager.h" />
 		<Unit filename="src/YoutubeInterface.cpp" />
 		<Unit filename="src/YoutubeInterface.h" />
 		<Unit filename="src/clipcrawler.cpp" />
