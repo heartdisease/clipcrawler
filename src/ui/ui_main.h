@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'main.ui'
 **
-** Created: Sun Dec 4 00:32:10 2011
+** Created: Sun Dec 4 15:04:28 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -65,6 +65,10 @@ public:
 
         browseButton = new QPushButton(MainWidget);
         browseButton->setObjectName(QString::fromUtf8("browseButton"));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/search_dir.png"), QSize(), QIcon::Normal, QIcon::Off);
+        browseButton->setIcon(icon);
+        browseButton->setIconSize(QSize(20, 20));
 
         gridLayout->addWidget(browseButton, 1, 2, 1, 1);
 

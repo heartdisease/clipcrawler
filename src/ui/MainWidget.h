@@ -14,10 +14,13 @@ class MainWidget : public QWidget, private Ui::MainWidget
 
 	private slots:
 		void appendStatusMessage(const QString &msg);
+		void searchDirectory();
 		void startDownload();
 
 	private:
 		 QNetworkAccessManager *manager;
+
+		 bool checkUserInput();
 
 	public:
 		MainWidget(QWidget *parent);

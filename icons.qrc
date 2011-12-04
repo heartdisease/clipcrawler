@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file alias="search_dir.png">images/search_dir.png</file>
+	</qresource>
+</RCC>

@@ -5,6 +5,7 @@ CONFIG += debug_and_release
 
 MOC_DIR = moc
 UI_DIR = src/ui
+RCC_DIR = src/qrc
 
 CONFIG(debug, debug|release) {
 	DESTDIR = bin/Debug

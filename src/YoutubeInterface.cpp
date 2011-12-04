@@ -7,10 +7,17 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 
+static QStringList elType;
+
 YoutubeInterface::YoutubeInterface(QNetworkAccessManager *manager)
 {
 	this->manager = manager;
 	setRawHeader("User-Agent", "clipcrawler");
+
+	elType.append("&el=embedded");
+	elType.append("&el=detailpage");
+	elType.append("&el=vevo");
+	elType.append("");
 }
 
 /**
@@ -32,41 +39,46 @@ void YoutubeInterface::fetchUrl(QString url)
 	QEventLoop loop;
 	QByteArray queryData;
 	QStringList urlList;
-	QUrl querySet;
+	QUrl querySet; // used as utility for parsing the query string
+	QUrl videoInfoUrl;
 
-	id = url.remove(QRegExp("^.*v="));
-	videoUrl = "http://www.youtube.com/get_video_info?&video_id=" + id;
-
-	setUrl(QUrl(videoUrl));
-	reply = manager->get(*this);
-
-	emit statusMessage("Download from '" + videoUrl + "' ...");
-
-	// wait until download has ended
-	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-	loop.exec();
-	queryData = reply->readAll();
-	querySet.setEncodedQuery(queryData);
-
-	videoTitle = querySet.queryItemValue("title").replace("+", "_");
-	videoFormat = "webm";
-
-	//emit statusMessage("Connection exit code: " + QString::number(reply->error()));
-	//emit statusMessage("title = " + videoTitle);
-	//emit statusMessage("fmt_list = " + querySet.queryItemValue("fmt_list"));
-
-	urlList = querySet.queryItemValue("url_encoded_fmt_stream_map").split(QRegExp("(url=)|(,)"), QString::SkipEmptyParts);
-	int i = 0;
-	for (QStringListIterator iter(urlList); iter.hasNext(); )
+	this->id = url.remove(QRegExp("^.*v="));
+	for (QStringListIterator iter(elType); iter.hasNext(); videoInfoUrl = QUrl("http://www.youtube.com/get_video_info?video_id=" + id + iter.next()))
 	{
-		videoUrl = QUrl::fromPercentEncoding(iter.next().toAscii());
-		if (videoUrl.contains("&fallback_host"))
-			videoUrl.truncate(videoUrl.indexOf("&fallback_host"));
-		++i;
-		break;
+		setUrl(videoInfoUrl);
+		reply = manager->get(*this);
+
+		// fetch whole get_video_info
+		QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+		loop.exec();
+		queryData = reply->readAll();
+		querySet.setEncodedQuery(queryData);
+
+		// check if video info is valid
+		if (querySet.hasQueryItem("token") && querySet.hasQueryItem("url_encoded_fmt_stream_map"))
+		{
+			videoTitle = querySet.queryItemValue("title").replace("+", "_");
+			videoFormat = "webm";
+
+			//emit statusMessage("Connection exit code: " + QString::number(reply->error()));
+			//emit statusMessage("title = " + videoTitle);
+			//emit statusMessage("fmt_list = " + querySet.queryItemValue("fmt_list"));
+
+			urlList = querySet.queryItemValue("url_encoded_fmt_stream_map").split(QRegExp("(url=)|(,)"), QString::SkipEmptyParts);
+			for (QStringListIterator iter(urlList); iter.hasNext(); )
+			{
+				videoUrl = QUrl::fromPercentEncoding(iter.next().toAscii());
+				if (videoUrl.contains("&fallback_host"))
+					videoUrl.truncate(videoUrl.indexOf("&fallback_host"));
+				break; // take the first element
+			}
+
+			emit statusMessage("Extract video url '" + videoUrl + "' ...");
+			return;
+		}
 	}
 
-	emit statusMessage("Video URL is: " + videoUrl);
+	emit statusMessage("ERROR: Cannot extract video url!");
 }
 
 const QString &YoutubeInterface::getVideoUrl() const

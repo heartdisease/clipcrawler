@@ -25,12 +25,6 @@ void DownloadManager::writeToFile()
 	outputFile->write(data.data(), data.size());
 }
 
-void DownloadManager::replyFinished(QNetworkReply *reply)
-{
-	emit statusMessage("Location -> " + reply->header(QNetworkRequest::LocationHeader).toString());
-	emit statusMessage("Location (raw) -> " + reply->rawHeader("Location"));
-}
-
 void DownloadManager::downloadTo(const QString &dir)
 {
 	QEventLoop loop;
@@ -38,7 +32,7 @@ void DownloadManager::downloadTo(const QString &dir)
 
 	if(!outputFile->open(QIODevice::WriteOnly))
 	{
-		emit statusMessage("Cannot open file.");
+		emit statusMessage("ERROR: Cannot open file!");
 		return;
 	}
 
@@ -49,10 +43,9 @@ void DownloadManager::downloadTo(const QString &dir)
 	);
 	reply = manager->get(*this);
 
-	emit statusMessage("Download file '" + outputFile->fileName() + "' from url '" + yti->getVideoUrl() + "' ...");
+	emit statusMessage("Download from url '" + yti->getVideoUrl() + "' to file '" + outputFile->fileName() + "' ...");
 	QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFile()));
 	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-	//QObject::connect(reply, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 	loop.exec();
 	emit statusMessage("Download finished! (return code " + QString::number(reply->error()) + ")");
 

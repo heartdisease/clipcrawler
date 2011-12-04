@@ -26,7 +26,6 @@ class DownloadManager : public QObject, public QNetworkRequest
 
 	private slots:
 		void writeToFile();
-		void replyFinished(QNetworkReply *reply);
 
 	public:
 		DownloadManager(QNetworkAccessManager *manager, const YoutubeInterface *yti);
