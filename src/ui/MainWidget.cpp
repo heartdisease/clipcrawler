@@ -6,6 +6,7 @@
 
 #include "YoutubeInterface.h"
 #include "DownloadManager.h"
+#include "HttpDownload.h"
 
 MainWidget::MainWidget(QWidget* parent) : QWidget(parent)
 {
@@ -26,10 +27,15 @@ void MainWidget::startDownload()
 {
 	YoutubeInterface yti(manager);
 	DownloadManager dm(manager, &yti);
+	//HttpDownload dl(manager);
 
 	connect(&yti, SIGNAL(statusMessage(const QString&)), this, SLOT(appendStatusMessage(const QString&)));
 	connect(&dm,  SIGNAL(statusMessage(const QString&)), this, SLOT(appendStatusMessage(const QString&)));
+	//connect(&dl, SIGNAL(statusMessage(const QString&)), this, SLOT(appendStatusMessage(const QString&)));
 
 	yti.fetchUrl(urlField->text());
 	dm.downloadTo(downloadField->text());
+	//dl.setDownloadPath(downloadField->text());
+	//dl.setUrl(QUrl(yti.getVideoUrl()));
+	//dl.download();
 }

@@ -32,7 +32,6 @@ void YoutubeInterface::fetchUrl(QString url)
 	QEventLoop loop;
 	QByteArray queryData;
 	QStringList urlList;
-	QString currUrl;
 	QUrl querySet;
 
 	id = url.remove(QRegExp("^.*v="));
@@ -60,16 +59,14 @@ void YoutubeInterface::fetchUrl(QString url)
 	int i = 0;
 	for (QStringListIterator iter(urlList); iter.hasNext(); )
 	{
-		currUrl = QUrl::fromPercentEncoding(iter.next().toAscii());
-		if (currUrl.contains("&fallback_host"))
-			currUrl.truncate(currUrl.indexOf("&fallback_host"));
-		videoUrl = currUrl;
-
-		//emit statusMessage("[encoded] stream_map[" + QString::number(i) + "] = " + tmp);
-		//emit statusMessage("[decoded] stream_map[" + QString::number(i) + "] = " + videoUrl);
+		videoUrl = QUrl::fromPercentEncoding(iter.next().toAscii());
+		if (videoUrl.contains("&fallback_host"))
+			videoUrl.truncate(videoUrl.indexOf("&fallback_host"));
 		++i;
 		break;
 	}
+
+	emit statusMessage("Video URL is: " + videoUrl);
 }
 
 const QString &YoutubeInterface::getVideoUrl() const

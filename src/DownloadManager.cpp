@@ -13,37 +13,49 @@ DownloadManager::DownloadManager(QNetworkAccessManager *manager, const YoutubeIn
 	this->manager = manager;
 	this->yti = yti;
 
-	setRawHeader("User-Agent", "clipcrawler");
+	setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.0");
+	setRawHeader("Accept-Charset", "utf-8");
+	setRawHeader("Accept-Language", "en-US");
 }
 
 void DownloadManager::writeToFile()
 {
-	//(*outputStream) << reply->readAll();
-	emit statusMessage("Write message");
+	QByteArray data = reply->readAll();
+
+	outputFile->write(data.data(), data.size());
+}
+
+void DownloadManager::replyFinished(QNetworkReply *reply)
+{
+	emit statusMessage("Location -> " + reply->header(QNetworkRequest::LocationHeader).toString());
+	emit statusMessage("Location (raw) -> " + reply->rawHeader("Location"));
 }
 
 void DownloadManager::downloadTo(const QString &dir)
 {
 	QEventLoop loop;
-	QFile target(dir + "/" + yti->getVideoTitle() + "." + yti->getVideoFormat());
+	outputFile = new QFile(dir + "/" + yti->getVideoTitle() + "." + yti->getVideoFormat());
 
-	if(!target.open(QIODevice::WriteOnly))
+	if(!outputFile->open(QIODevice::WriteOnly))
 	{
 		emit statusMessage("Cannot open file.");
 		return;
 	}
 
-	//outputStream = new QTextStream(&target);
-
-	setUrl(QUrl(yti->getVideoUrl()));
+	setUrl(
+		QUrl(
+			QUrl::fromPercentEncoding(yti->getVideoUrl().toAscii()) // fromPercentEncoding() is very important here!
+		)
+	);
 	reply = manager->get(*this);
 
-	emit statusMessage("Download file '" + target.fileName() + "' from url '" + yti->getVideoUrl() + "' ...");
-	QObject::connect(reply, SIGNAL(readyRead()), this,  SLOT(writeToFile()));
-	QObject::connect(reply, SIGNAL(finished()),  &loop, SLOT(quit()));
+	emit statusMessage("Download file '" + outputFile->fileName() + "' from url '" + yti->getVideoUrl() + "' ...");
+	QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFile()));
+	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+	//QObject::connect(reply, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 	loop.exec();
 	emit statusMessage("Download finished! (return code " + QString::number(reply->error()) + ")");
 
-	target.close(); // close file stream
-	//delete outputStream;
+	outputFile->close(); // close file stream
+	delete outputFile;
 }
